@@ -21,7 +21,7 @@
 # from unitree_rl_lab.assets.robots.unitree import UNITREE_GO2_CFG as ROBOT_CFG
 # from unitree_rl_lab.tasks.locomotion import mdp
 
-from unitree_rl_lab.tasks.locomotion.robots.go2.velocity_env_cfg.py import RobotEnvCfg
+from unitree_rl_lab.tasks.locomotion.robots.go2.velocity_env_cfg import RobotEnvCfg
 
 @configclass 
 class RobotEvalEnvCfg(RobotEnvCfg):
