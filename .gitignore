@@ -73,3 +73,9 @@ datasets
 
 # Mimic
 *.npz
+
+#####
+
+# SLURM
+slurm
+
