@@ -184,31 +184,33 @@ def main():
     #-----------------
 
     for i, (cmd_vx, cmd_vy, cmd_wz) in enumerate(commands):
-        obs, _ = env.reset()
-        cmd_term = env.unwrapped.command_manager.get_term("base_velocity")
-        cmd_term.command[:, 0] = cmd_vx
-        cmd_term.command[:, 1] = cmd_vy
-        cmd_term.command[:, 2] = cmd_wz
+        with torch.inference_mode():
+     
+            obs, _ = env.reset()
+            cmd_term = env.unwrapped.command_manager.get_term("base_velocity")
+            cmd_term.command[:, 0] = cmd_vx
+            cmd_term.command[:, 1] = cmd_vy
+            cmd_term.command[:, 2] = cmd_wz
 
-        has_failed = torch.zeros(env.num_envs, dtype=torch.bool, device=env.device)
+            has_failed = torch.zeros(env.num_envs, dtype=torch.bool, device=env.device)
 
-        step_history = []
+            step_history = []
 
-        for step in range(steps_per_command):
-            with torch.inference_mode():
-                actions = policy(obs)
-                obs, _, dones, _ = env.step(actions)
+            for step in range(steps_per_command):
+                
+                    actions = policy(obs)
+                    obs, _, dones, _ = env.step(actions)
 
-                has_failed = has_failed | dones
+                    has_failed = has_failed | dones
 
-                robot_data = env.unwrapped.scene["robot"].data
-                actual_vel = torch.stack([
-                    robot_data.root_lin_vel_b[:, 0],  # vx
-                    robot_data.root_lin_vel_b[:, 1],  # vy
-                    robot_data.root_ang_vel_b[:, 2]   # wz
-                ], dim=-1)
+                    robot_data = env.unwrapped.scene["robot"].data
+                    actual_vel = torch.stack([
+                        robot_data.root_lin_vel_b[:, 0],  # vx
+                        robot_data.root_lin_vel_b[:, 1],  # vy
+                        robot_data.root_ang_vel_b[:, 2]   # wz
+                    ], dim=-1)
 
-                step_history.append(actual_vel)
+                    step_history.append(actual_vel)
 
         valid_mask = ~has_failed 
         
