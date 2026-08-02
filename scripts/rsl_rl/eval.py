@@ -167,7 +167,7 @@ def main():
     dt = env.unwrapped.step_dt # environment dt
 
     eval_duration_s = 5.0 # seconds
-    steps_per_command = eval_duration_s // dt
+    steps_per_command = int(eval_duration_s/dt)
 
     # command combos
     vx_range = np.linspace(-1.0, 1.0, 5)  # 5 points
