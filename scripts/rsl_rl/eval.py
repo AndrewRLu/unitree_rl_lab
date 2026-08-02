@@ -184,6 +184,7 @@ def main():
     #-----------------
 
     for i, (cmd_vx, cmd_vy, cmd_wz) in enumerate(commands):
+        print(i)
         with torch.inference_mode():
      
             obs, _ = env.reset()
